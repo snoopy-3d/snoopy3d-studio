@@ -1,0 +1,236 @@
+{
+  "exports": [
+    {
+      "id": "organizer",
+      "format": "STL",
+      "bytes": 18284
+    },
+    {
+      "id": "organizer",
+      "format": "3MF",
+      "bytes": 4701
+    },
+    {
+      "id": "box",
+      "format": "STL",
+      "bytes": 224684
+    },
+    {
+      "id": "box",
+      "format": "3MF",
+      "bytes": 52929
+    },
+    {
+      "id": "vase",
+      "format": "STL",
+      "bytes": 1664084
+    },
+    {
+      "id": "vase",
+      "format": "3MF",
+      "bytes": 549460
+    },
+    {
+      "id": "lamp",
+      "format": "STL",
+      "bytes": 1704484
+    },
+    {
+      "id": "lamp",
+      "format": "3MF",
+      "bytes": 551135
+    },
+    {
+      "id": "skadis",
+      "format": "STL",
+      "bytes": 244084
+    },
+    {
+      "id": "skadis",
+      "format": "3MF",
+      "bytes": 48244
+    },
+    {
+      "id": "stand",
+      "format": "STL",
+      "bytes": 11084
+    },
+    {
+      "id": "stand",
+      "format": "3MF",
+      "bytes": 3283
+    },
+    {
+      "id": "coaster",
+      "format": "STL",
+      "bytes": 38284
+    },
+    {
+      "id": "coaster",
+      "format": "3MF",
+      "bytes": 9289
+    },
+    {
+      "id": "tag",
+      "format": "STL",
+      "bytes": 205984
+    },
+    {
+      "id": "tag",
+      "format": "3MF",
+      "bytes": 48422
+    },
+    {
+      "id": "plate",
+      "format": "STL",
+      "bytes": 192984
+    },
+    {
+      "id": "plate",
+      "format": "3MF",
+      "bytes": 47477
+    },
+    {
+      "id": "cutter",
+      "format": "STL",
+      "bytes": 37684
+    },
+    {
+      "id": "cutter",
+      "format": "3MF",
+      "bytes": 10402
+    },
+    {
+      "id": "lithophane",
+      "format": "STL",
+      "bytes": 1513084
+    },
+    {
+      "id": "lithophane",
+      "format": "3MF",
+      "bytes": 326859
+    }
+  ],
+  "responsive": [
+    {
+      "width": 305,
+      "route": "home",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "generators",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "generators/organizer",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "generators/cutter",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "gallery",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "calc",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "projects",
+      "scroll": 305
+    },
+    {
+      "width": 305,
+      "route": "viewer",
+      "scroll": 305
+    },
+    {
+      "width": 375,
+      "route": "home",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "generators",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "generators/organizer",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "generators/cutter",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "gallery",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "calc",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "projects",
+      "scroll": 375
+    },
+    {
+      "width": 375,
+      "route": "viewer",
+      "scroll": 375
+    },
+    {
+      "width": 753,
+      "route": "home",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "generators",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "generators/organizer",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "generators/cutter",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "gallery",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "calc",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "projects",
+      "scroll": 753
+    },
+    {
+      "width": 753,
+      "route": "viewer",
+      "scroll": 753
+    }
+  ]
+}

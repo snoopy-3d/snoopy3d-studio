@@ -7,7 +7,7 @@ export function validateOrder(o) {
   if (!['PLA','PETG','ABS','ASA','Помогите выбрать'].includes(o.material)) throw Error('Выберите материал');
   if (!Number.isInteger(o.quantity) || o.quantity < 1 || o.quantity > 100) throw Error('Количество: от 1 до 100');
   if (o.consent !== true) throw Error('Нужно согласие на передачу данных владельцу');
-  if (!o.model || typeof o.model.type !== 'string' || !['box','vase','lamp','skadis'].includes(o.model.type) || !o.model.parameters || JSON.stringify(o.model).length > 16000) throw Error('Некорректные параметры модели');
+  if (!o.model || typeof o.model.type !== 'string' || !['box','vase','lamp','skadis','organizer','stand','coaster','tag','plate','lithophane','cutter'].includes(o.model.type) || !o.model.parameters || JSON.stringify(o.model).length > 16000) throw Error('Некорректные параметры модели');
   return o;
 }
 export function inspectSTL(bytes) {
