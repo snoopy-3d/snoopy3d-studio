@@ -23,7 +23,7 @@ export function createOrderServer({token=process.env.TELEGRAM_BOT_TOKEN,chat=pro
     let id,ownsLock=false;
     try {
       const chunks=[];let length=0;
-      for await(const chunk of req){length+=chunk.length;if(length>MAX_STL*4/3+40000){json(res,413,{error:'Файл слишком большой'});req.resume();return}chunks.push(chunk)}
+      for await(const chunk of req){length+=chunk.length;if(length>MAX_STL*4/3+5000000){json(res,413,{error:'Файл слишком большой'});req.resume();return}chunks.push(chunk)}
       const body=JSON.parse(Buffer.concat(chunks).toString('utf8')),order=validateOrder(body.order);id=order.id;
       if(typeof body.stl!=='string'||body.stl.length>Math.ceil(MAX_STL/3)*4||!/^[A-Za-z0-9+/]+={0,2}$/.test(body.stl))throw Error('Неверный файл');
       const bytes=Buffer.from(body.stl,'base64'),info=inspectSTL(bytes),sha=createHash('sha256').update(bytes).digest('hex');

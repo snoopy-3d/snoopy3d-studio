@@ -1,0 +1,26 @@
+import {initialize,generate} from '../source/geometry.js';import {catalog,defaults} from '../source/catalog.js';import {inspect,stl,threeMF,meshFromBuffer} from '../source/formats.js';import opentype from 'opentype.js';import fs from 'node:fs';import assert from 'node:assert/strict';import {patternNames} from '../source/patterns.js';import {outlineNames} from '../source/outlines.js';import {packImage} from '../source/image-data.js';import {traceImage} from '../source/contours.js';
+await initialize();const fonts={};for(const k of ['sans','serif','mono']){const b=fs.readFileSync(new URL('../source/public/fonts/'+k+'.ttf',import.meta.url));fonts[k]=opentype.parse(b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength));}const image={width:64,height:64,data:Float32Array.from({length:4096},(_,i)=>Math.hypot(i%64-32,Math.floor(i/64)-32)<24?.05:1)},photoData=packImage(image),artData=JSON.stringify(traceImage(image));const resources={fonts,image};let passed=0,failures=[],results=[];
+function check(id,changes={},round=false){const start=Date.now();try{const p={...defaults(id),meshQuality:'Рабочее',quality:'Обычная',resolution:80,photoResolution:96,...changes},parts=generate(id,p,resources),r=inspect(parts);assert.ok(r.valid,JSON.stringify(r.reports));if(round){const again=inspect([meshFromBuffer(stl(parts),'test.stl')]);assert.ok(again.valid,'Invalid STL: '+JSON.stringify(again.reports));assert.ok(again.size.every((x,i)=>Math.abs(x-r.size[i])<.04),'STL size');assert.ok(Math.abs(again.volume-r.volume)<Math.max(.1,r.volume*.0001),'STL volume');assert.equal(threeMF(parts)[0],80);}passed++;results.push({id,changes,triangles:r.triangles,parts:parts.length,ms:Date.now()-start});}catch(e){failures.push({id,changes,error:e.message});}console.log(id,JSON.stringify(changes),failures.at(-1)?.changes===changes?'FAIL '+failures.at(-1).error:'PASS');}
+for(const boxKind of catalog.find(t=>t.id==='box').fields.find(f=>f.key==='boxKind').options)check('box',{boxKind},true);
+for(const lid of catalog.find(t=>t.id==='box').fields.find(f=>f.key==='lid').options)check('box',{lid,boxShape:lid==='На резьбе'?'Круг':'Прямоугольник',text:''},true);
+for(const boxShape of ['Круг','Овал','Многоугольник'])check('box',{boxShape,text:''},true);
+for(const cellLayout of ['Большая + 2','Большая + 3','Сбоку + 2'])check('box',{cellLayout,boxKind:'Лоток-органайзер'});
+for(const shutterDesign of ['Органайзер','Зарядная станция','Футляр','Хлебница','Бюро','Шкафчик'])check('box',{boxKind:'Коробка со шторкой',shutterDesign,text:''});
+for(const wallCutPattern of ['Соты','Круги','Ромбы','Прорези'])check('box',{wallCutPattern,text:''},true);
+check('box',{cutouts:JSON.stringify([{side:'Спереди',x:0,z:16,w:12,h:8,shape:'Прямоугольник'},{side:'Слева',x:0,z:18,w:7,h:7,shape:'Круг'}])},true);
+for(const shape of outlineNames)check('coaster',{shape},false);
+for(const topPattern of patternNames)check('coaster',{topPattern},true);
+for(const coasterSlots of ['Параллельные','Радиальные','Кольцевые','Соты','Круги'])check('coaster',{coasterSlots},true);
+check('coaster',{text:'SNOOPY',textSize:8},true);for(const coasterPhoto of ['Фоторельеф','Фотогравировка'])check('coaster',{coasterPhoto,photoData},true);
+for(const id of ['tag','plate'])for(const holePosition of ['Слева','Справа','Сверху','Снизу','Свой X/Y','Ушко'])check(id,{holes:1,holePosition,text:'',holeX:15,holeY:15},true);
+for(const holeShape of ['Продолговатое','Под потай'])check('tag',{holeShape,text:''},true);
+for(const standType of ['Цельная','Разборная'])for(const cableRoute of ['Открытый спереди','Сзади','Сквозной канал'])check('stand',{standType,cableRoute},true);
+for(const motif of catalog.find(t=>t.id==='cutter').fields.find(f=>f.key==='motif').options)check('cutter',{motif},true);
+for(const mode of ['Трафарет','Штамп','Комплект','Вырубка с рисунком'])check('cutter',{mode},true);
+for(const mode of ['Формочка','Трафарет','Штамп','Комплект','Вырубка с рисунком'])check('cutter',{source:'Картинка / SVG',artData,mode},true);
+check('cutter',{source:'Буквы',cookieText:'АЛИСА',mode:'Комплект'},true);
+for(const snaps of ['Нет','Пупырышки','Поясок'])check('sign',{text:'А',snaps},true);
+check('sign',{text:'О',frame:'Профиль 15×15',ledHolder:'Гибкий неон'},true);
+check('sign',{signSource:'Логотип SVG / картинка',artData},true);
+for(const id of ['box','vase','lamp','organizer','stand','coaster','tag','plate','skadis'])check(id,{wallPattern:'Волны',text:''},true);
+const result={passed,failures,results};fs.writeFileSync(new URL('../test-output/upgrade-features.json',import.meta.url),JSON.stringify(result,null,2));console.log(JSON.stringify({passed,failures},null,2));if(failures.length)process.exitCode=1;

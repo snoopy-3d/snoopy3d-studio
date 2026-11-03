@@ -2,16 +2,16 @@
 export function customShape(api,p,fonts,keep,textSection){
  const C=api.CrossSection;
  const poly=points=>keep(new C([points],'EvenOdd'));
- const circle=(x,y,r)=>keep(C.circle(r,64).translate([x,y]));
+ const circle=(x,y,r)=>keep(C.circle(r,256).translate([x,y]));
  const rect=(x,y,w,h)=>keep(C.square([w,h]).translate([x,y]));
  const merge=(...items)=>keep(C.union(items.flat()));
- const oval=(x,y,rx,ry)=>keep(C.circle(1,64).scale([rx,ry]).translate([x,y]));
+ const oval=(x,y,rx,ry)=>keep(C.circle(1,256).scale([rx,ry]).translate([x,y]));
  const star=(n=5,r=45,inner=21)=>poly(Array.from({length:n*2},(_,i)=>{const a=i*Math.PI/n+Math.PI/2;return[Math.cos(a)*(i%2?inner:r),Math.sin(a)*(i%2?inner:r)]}));
  const animal=(ears,tail=false)=>merge(oval(48,36,32,22),circle(70,66,23),...ears,...(tail?[poly([[20,35],[0,70],[10,27]])]:[]),rect(25,0,14,30),rect(59,0,14,30));
  let shape;
  switch(p.motif){
  case 'Звёздочка':shape=star();break;
- case 'Сердце':shape=poly(Array.from({length:128},(_,i)=>{const a=i*Math.PI*2/128;return[16*Math.sin(a)**3,13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a)]}));break;
+ case 'Сердце':shape=poly(Array.from({length:384},(_,i)=>{const a=i*Math.PI*2/384;return[16*Math.sin(a)**3,13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a)]}));break;
  case 'Цветок':shape=merge(circle(0,0,20),Array.from({length:6},(_,i)=>circle(Math.cos(i*Math.PI/3)*22,Math.sin(i*Math.PI/3)*22,18)));break;
  case 'Круг':shape=circle(0,0,45);break;
  case 'Квадрат':shape=rect(0,0,85,85);break;
@@ -37,7 +37,7 @@ export function customShape(api,p,fonts,keep,textSection){
  case 'Облачко':shape=merge(rect(0,0,75,28),circle(7,26,22),circle(33,40,28),circle(62,30,22));break;
  case 'Солнышко':shape=merge(circle(0,0,29),star(12,47,27));break;
  case 'Луна':shape=keep(circle(0,0,45).subtract(circle(22,7,39)));break;
- case 'Листик':shape=poly(Array.from({length:96},(_,i)=>{const a=i*Math.PI*2/96;return[Math.sin(a)*30,Math.cos(a)*48]}));break;
+ case 'Листик':shape=poly(Array.from({length:256},(_,i)=>{const a=i*Math.PI*2/256;return[Math.sin(a)*30,Math.cos(a)*48]}));break;
  case 'Яблочко':shape=merge(circle(-16,0,29),circle(16,0,29),rect(-4,18,8,24),oval(12,34,19,9));break;
  case 'Грибочек':shape=merge(rect(-13,-34,26,45),keep(circle(0,0,45).intersect(rect(-50,0,100,50))));break;
  case 'Снежинка':shape=merge(Array.from({length:6},(_,i)=>keep(rect(-5,0,10,45).rotate(i*60))));break;

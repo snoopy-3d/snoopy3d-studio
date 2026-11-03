@@ -1,3 +1,5 @@
+import {qualityOf} from './quality.js';
+import {radialDecoration} from './surface-tools.js';
 // Independent parametric surface implementation. No third-party generator code.
 export const silhouettes={
  'Цилиндр':[1,1,1,1,1,1,1], 'Бочка':[.72,.88,.98,1,.98,.88,.72],
@@ -5,7 +7,7 @@ export const silhouettes={
  'Бутылка':[.8,.94,.96,.94,.66,.37,.37], 'Кубок':[.42,.36,.44,.7,.92,1,.94],
  'Конус':[.5,.58,.67,.75,.83,.92,1], 'Шар':[.38,.77,.95,1,.95,.77,.38]
 };
-export const usesVaseConstructor=p=>p.profile!=='Прежние параметры'||p.vaseType!=='Обычная'||p.pattern!=='Прежний рельеф'||['Многоугольник','Мягкий квадрат','Лепестки'].includes(p.section)||p.twistCurve!=='Равномерно'||p.quality!=='Обычная';
+export const usesVaseConstructor=p=>p.profile!=='Прежние параметры'||p.vaseType!=='Обычная'||p.pattern!=='Прежний рельеф'||['Многоугольник','Мягкий квадрат','Лепестки'].includes(p.section)||p.twistCurve!=='Равномерно';
 const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
 export function profilePoints(p){
  if(p.profile==='Свой силуэт'){let a;try{a=JSON.parse(p.profileData)}catch{}if(!Array.isArray(a)||a.length!==7||a.some(x=>!Number.isFinite(x)||x<.15||x>1.5))throw Error('Силуэт должен содержать семь радиусов от 15 до 150%.');return a;}
@@ -24,7 +26,7 @@ export function buildVaseMesh(p){
  let audio=null,image=null;
  if(sound){try{audio=JSON.parse(p.soundData)}catch{}if(!Array.isArray(audio)||audio.length!==128||audio.some(x=>!Number.isFinite(x)||x<0||x>1))throw Error('Загрузите аудио или запишите голос для звуковой вазы.');if(p.soundDirection==='Вокруг'){const seam=(audio[0]+audio[127])/2;audio[0]=seam;audio[127]=seam;}}
  if(night){try{image=JSON.parse(p.lightData)}catch{}if(!image||image.width!==96||image.height!==96||!Array.isArray(image.data)||image.data.length!==9216||image.data.some(x=>!Number.isInteger(x)||x<0||x>255))throw Error('Загрузите изображение для вазы-ночника.');if(p.lightMax<=p.lightMin)throw Error('Максимальная толщина ночника должна быть больше минимальной.');}
- let N=p.quality==='Высокая'?192:128,M=p.quality==='Высокая'?128:80;
+ let N=qualityOf(p).radial,M=qualityOf(p).vertical;
  if(p.pattern==='Грани'){N=p.facets*Math.max(1,Math.floor(N/p.facets));M=48;}
  const bottom=open?0:p.bottom,vs=[],ts=[],q=(a,b,c,d)=>ts.push(a,b,c,a,c,d);
  const twistAt=u=>{const t=p.twistCurve==='Кверху'?u*u:p.twistCurve==='К основанию'?1-(1-u)*(1-u):u;return p.twist*Math.PI/180*t;};
@@ -48,7 +50,7 @@ export function buildVaseMesh(p){
   const fade=Math.min(1,u*p.h/Math.max(3,p.bottom*2));
   let out=r*section+p.wave*relief*fade;
   if(sound){const sample=p.soundDirection==='Кольцами'?u:((a/(2*Math.PI))%1+1)%1;out+=p.soundDepth*interpolate(audio,sample)*fade;}
-  return out;
+  return out+radialDecoration(p,u,a,out);
  };
  const wallAt=(u,a)=>{
   let w=p.wall;

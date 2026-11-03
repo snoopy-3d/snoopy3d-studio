@@ -1,4 +1,4 @@
-export const MAX_STL = 8 * 1024 * 1024;
+export const MAX_STL = 64 * 1024 * 1024;
 export function validateOrder(o) {
   if (!o || !/^[a-f0-9-]{36}$/.test(o.id)) throw Error('Некорректный номер заказа');
   for (const [key, max] of Object.entries({name:80,contact:120,city:100,color:60,comment:400})) {
@@ -7,12 +7,12 @@ export function validateOrder(o) {
   if (!['PLA','PETG','ABS','ASA','Помогите выбрать'].includes(o.material)) throw Error('Выберите материал');
   if (!Number.isInteger(o.quantity) || o.quantity < 1 || o.quantity > 100) throw Error('Количество: от 1 до 100');
   if (o.consent !== true) throw Error('Нужно согласие на передачу данных владельцу');
-  if (!o.model || typeof o.model.type !== 'string' || !['box','vase','lamp','skadis','organizer','stand','coaster','tag','plate','lithophane','cutter'].includes(o.model.type) || !o.model.parameters || JSON.stringify(o.model).length > 16000) throw Error('Некорректные параметры модели');
+  if (!o.model || typeof o.model.type !== 'string' || !['box','vase','lamp','skadis','organizer','stand','coaster','tag','plate','lithophane','cutter','sign'].includes(o.model.type) || !o.model.parameters || JSON.stringify(o.model).length > 5000000) throw Error('Некорректные параметры модели');
   return o;
 }
 export function inspectSTL(bytes) {
   const a = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
-  if (a.byteLength < 134 || a.byteLength > MAX_STL) throw Error('STL должен быть от 134 байт до 8 МБ');
+  if (a.byteLength < 134 || a.byteLength > MAX_STL) throw Error('STL должен быть от 134 байт до 64 МБ');
   const v = new DataView(a.buffer, a.byteOffset, a.byteLength), count = v.getUint32(80,true);
   if (!count || 84 + count * 50 !== a.byteLength) throw Error('Повреждён бинарный STL');
   const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];

@@ -3,3 +3,4 @@ frontend/.public/
 frontend/.dist/
 frontend/test-output/
 frontend/redesign-test-result.json
+frontend/tests/last-functional-result.json
