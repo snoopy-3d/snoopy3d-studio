@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "node build.mjs",
-    "test": "node tests/redesign.mjs && node tests/legacy-four.mjs"
+    "test": "node tests/redesign.mjs && node tests/legacy-four.mjs && node tests/vase-constructor.mjs"
   },
   "devDependencies": {
     "fflate": "0.8.2",
